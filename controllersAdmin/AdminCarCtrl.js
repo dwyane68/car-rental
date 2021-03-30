@@ -40,7 +40,6 @@ exports.add = (req, res, handleError) => {
     const data = {
       name, price, color, capacity, type
     }
-    console.log(data);
     Car.create(data).then((car) => {
       res.send(buildResponse({car}, 'Car added!'));
     }, handleError)

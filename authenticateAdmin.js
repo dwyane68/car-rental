@@ -12,9 +12,7 @@ module.exports = (req, res, next) => {
     const token = header[1];
     jwt.verifyToken(token, (err, decoded) => {
       if(!err){
-        req.adminId = decoded.id;
-        req.role = decoded.role;
-        req.roleId = decoded.roleId;
+        req.adminId = decoded.adminId;
         next();
       }else{
         res.status(401).send(INVALID_AUTH_TOKEN);

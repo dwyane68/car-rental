@@ -15,7 +15,8 @@ const {
 const generateToken = (admin) => {
 
   let tokenData = {
-    id: admin.id,
+    adminId: admin.id,
+    role: "ROOT"
   };
 
   const token = jwt.generateShortToken(tokenData);

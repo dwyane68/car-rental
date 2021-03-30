@@ -1,9 +1,18 @@
 const express = require('express');
 const router = express.Router();
-
+const authenticateAdmin = require('../authenticateAdmin');
 const AdminCarController = require('../controllersAdmin/AdminCarCtrl');
+const {UNAUTHORISED} = require('../config/errorCodes');
 
-router.post('/add', AdminCarController.add);
-router.post('/update', AdminCarController.update);
+const accessCheck = (req, res, next) => {
+    if(!req.adminId){
+        res.send(UNAUTHORISED);
+        return;
+    }
+    next();
+};
+  
+router.post('/add', authenticateAdmin, accessCheck, AdminCarController.add);
+router.post('/update', authenticateAdmin, accessCheck, AdminCarController.update);
 
 module.exports = router;
