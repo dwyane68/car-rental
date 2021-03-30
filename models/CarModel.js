@@ -33,9 +33,10 @@ exports.create = async (data) => {
   return await car.create(data)
 };
 
-exports.update = async (userId, userData) => {
-  return await user.update(userData, {
-    where: {id: userId}
+exports.update = async (carId, carData) => {
+  return await car.update(carData, {
+    where: {id: carId},
+    returning: true,
   });
 }
 

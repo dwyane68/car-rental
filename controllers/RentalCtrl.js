@@ -1,5 +1,6 @@
 const Rental = require('../models/RentalModel');
 const Car = require('../models/CarModel');
+const User = require('../models/UserModel');
 const Fine = require('../models/FineModel');
 
 const {
@@ -52,7 +53,7 @@ exports.add = async (req, res, handleError) => {
     ('noOfDays' + '|' + req.body.noOfDays + '|' + 'required'),
     ('carId' + '|' + req.body.carId + '|' + 'required'),
   ]);
-  console.log(sanitized);
+  
   if(sanitized.error){
     res.send(invalidResponse(sanitized.error));
     return;
@@ -64,7 +65,14 @@ exports.add = async (req, res, handleError) => {
     carId,
     noOfDays
   }
-
+  const user = await User.get(req.userId);
+  if(!user) {
+    return res.send(USER_NOT_FOUND);
+  }
+  
+  if(!user.licenseId) {
+    return res.send(buildResponse({}, "License Id is required rent a car"));
+  }
   const car = await Car.get(carId);
   if(!car) {
     return res.send(NO_DATA_FOUND);

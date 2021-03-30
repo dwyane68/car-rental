@@ -13,6 +13,7 @@ const accessCheck = (req, res, next) => {
 };
   
 router.post('/add', authenticateAdmin, accessCheck, AdminCarController.add);
+router.post('/add-image', authenticateAdmin, accessCheck, AdminCarController.addImage);
 router.post('/update', authenticateAdmin, accessCheck, AdminCarController.update);
 
 module.exports = router;

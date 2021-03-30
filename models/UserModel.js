@@ -3,6 +3,9 @@ const {user, rental, fine} = require('../db/models');
 exports.get = async (id) => {
   let condition = {id: id};
   return await user.findOne({
+    attributes: {
+      exclude: ['password']
+    },
     where: condition
   });
 };
@@ -59,6 +62,9 @@ exports.getBasicDetails = async (id) => {
 exports.getByEmail = async (email) => {
   let condition = {emailId: email};
   return await user.findOne({
+    attributes: {
+      exclude: ['password']
+    },
     where: condition,
   });
 };

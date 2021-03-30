@@ -1,4 +1,3 @@
-const AWS = require('aws-sdk');
 const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
@@ -23,7 +22,7 @@ exports.uploadSingleLocal = function(req, res, details, callback){
   if(details.maxSize){
     options.limits = { fileSize: details.maxSize}
   }
-
+  
   const upload = multer(options)
   upload.single(details.key)(req, res, callback);
 };

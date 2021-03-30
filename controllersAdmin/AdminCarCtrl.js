@@ -1,9 +1,11 @@
 const Car = require('../models/CarModel');
-
+const upload = require('../services/upload');
+const uuid = require('uuid');
+const fs = require('fs');
 const {
   buildResponse,
   validate,
-  invalidResponse
+  invalidResponse,
 } = require('../services/utils');
 
 const { USER_EXISTS, CAR_EXISTS, UNAUTHORISED, USER_NOT_FOUND, NO_DATA_FOUND } = require('../config/errorCodes');
@@ -44,6 +46,47 @@ exports.add = (req, res, handleError) => {
       res.send(buildResponse({car}, 'Car added!'));
     }, handleError)
   }, handleError)
+};
+
+exports.addImage = (req, res, handleError) => {
+  const fileName = uuid();
+  upload.uploadSingleLocal(req, res, {
+    fileName: fileName, //unique random file name without extension
+    destination : process.cwd() + '/uploads/',
+    maxSize: 20 * 1000000,
+    key: 'image'
+  }, (err) => {
+    const {carId} = req.body;
+
+    if (!err && req.fileData) {
+      let filePath = req.file.path;
+      let fileName = req.file.filename;
+      if(!carId) {
+        fs.unlinkSync(filePath);
+        return res.send(invalidResponse('Invalid carId'))
+      }
+      let carData = {
+        image: fileName
+      };
+      
+      Car.get(carId).then((car) => {
+        if(fs.existsSync('uploads/' + car.image)) {
+          fs.unlinkSync('uploads/' + car.image);
+        }
+        car.update(carData);
+        car.dataValues.image = fileName;
+        res.send(buildResponse({car: car}, 'Car image updated!'));
+      }, handleError);
+    } else {
+      let error = {
+        error: {
+          code: err && err.code,
+          msg: err && err.message
+        }
+      }
+      res.send(error);
+    }
+  })
 };
 
 exports.update = (req, res, handleError) => {
