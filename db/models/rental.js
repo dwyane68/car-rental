@@ -1,47 +1,47 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const admin = sequelize.define('admin', {
+  const rental = sequelize.define('rental', {
     id: {
       allowNull: false,
       primaryKey: true,
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4
     },
-    firstName: {
+    carId: {
       type: DataTypes.STRING,
-      field: 'first_name'
+      field: 'car_id'
     },
-    lastName: {
+    userId: {
       type: DataTypes.STRING,
-      field: 'last_name'
+      field: 'user_id'
     },
-    emailId: {
+    noOfDays: {
       type: DataTypes.STRING,
-      field: 'email_id'
+      field: 'no_of_days'
     },
-    phone: {
+    amount: {
       type: DataTypes.STRING,
-      field: 'phone'
+      field: 'amount'
     },
-    password: {
-      type: DataTypes.STRING,
-      field: 'password'
+    returnDate: {
+      type: DataTypes.DATE,
+      field: 'return_date'
     },
     createdAt: {
-      allowNull: false,
       type: DataTypes.DATE,
       field: 'created_at'
     },
     updatedAt: {
-      allowNull: false,
       type: DataTypes.DATE,
       field: 'updated_at'
     },
   }, {
     underscored: true,
   });
-  admin.associate = function(models) {
+  rental.associate = function(models) {
     // associations can be defined here
+    rental.belongsTo(models.user);
+    rental.hasOne(models.fine);
   };
-  return admin;
+  return rental;
 };

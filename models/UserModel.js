@@ -1,5 +1,4 @@
-const {user, business, businessCategory, city, usertree, contract, counterEnlistment, ftPay} = require('../db/models');
-const {USER_TYPE} = require('../config/constants');
+const {user, rental, fine} = require('../db/models');
 
 exports.get = async (id) => {
   let condition = {id: id};
@@ -19,6 +18,33 @@ exports.getList = async (offset, limit) => {
   })
 };
 
+exports.getRentalList = async (offset, limit) => {
+  return user.findAndCountAll({
+    attributes: {
+      exclude: ['password']
+    },
+    include: [{
+      model: rental
+    }],
+    order: [['createdAt', 'DESC']],
+    offset: offset,
+    limit: limit,
+  })
+};
+
+exports.getFinesList = async (offset, limit) => {
+  return user.findAndCountAll({
+    attributes: {
+      exclude: ['password']
+    },
+    include: [{
+      model: fine
+    }],
+    order: [['createdAt', 'DESC']],
+    offset: offset,
+    limit: limit,
+  })
+};
 
 exports.getBasicDetails = async (id) => {
   return await user.findOne({
@@ -41,42 +67,15 @@ exports.getDetails = async (condition) => {
   return await user.findOne({
     where: condition,
     attributes: {
-      exclude: ['createdAt', 'updatedAt', 'otpRequestAttempts', 'otpRequestedAt', 'fcmToken', 'visible']
+      exclude: ['createdAt', 'updatedAt', 'password']
     },
-    include: [{
-      model: business,
-      include: [{
-        model: businessCategory
-      }, {
-        model: counterEnlistment
-      }]
-    }, {
-      model: city
-    }, {
-      model: usertree,
-      attributes:["id", "walletAmount", "discountAmount", "planExpiry", "planStatus"],
-    },{
-      model: contract,
-      attributes:["id", "file", "startDate", "endDate", "type"],
-    }, {
-      model: ftPay
-    }]
   });
 };
 
 exports.getSelfDetails = async (condition) => {
   return await user.findOne({
     where: condition,
-    attributes: ['id', 'firstName', 'lastName', 'phone', 'emailId', 'dob', "profilePic", "profilePicUpdatedAt"]
-  });
-};
-exports.getAddressDetails = async (condition) => {
-  return await user.findOne({
-    where: condition,
-    attributes: ['id', 'cityId'],
-    include: [{
-      model: city
-    }],
+    attributes: ['id', 'firstName', 'lastName', 'phone', 'emailId', 'profilePic']
   });
 };
 

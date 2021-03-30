@@ -14,6 +14,13 @@ module.exports = {
     }
   },
 
+  CAR_EXISTS: {
+    error: {
+      code: 'CAR_EXISTS',
+      msg: 'Car alerady added'
+    }
+  },
+
   USER_NOT_FOUND: {
     error: {
       code: 'USER_NOT_FOUND',

@@ -8,9 +8,5 @@ module.exports = {
     EMSG_UNAUTHORIZED: 'You are not authorized to perform this action!',
     EMSG_FORBIDDEN: 'You have been forbidden from performing this action',
 
-
-    USER_TYPE: {
-        CUSTOMER: 'CUSTOMER',
-        ADMIN: 'ADMIN',
-    },
+    FINE_PER_DAY: 1000
 }

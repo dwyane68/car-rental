@@ -17,6 +17,15 @@ exports.getDateDiffFromNow = (date) => {
     return (now - dateObj);
 };
 
+exports.getDateDiffDays = (date1, date2) => {
+    const dateObj = new Date(date1);
+    const dateObj2 = new Date(date2);
+
+    const diffTime = Math.abs(dateObj2 - dateObj);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    return diffDays;
+};
+
 exports.filterParams = (params, filterKeys) => {
     const keys = Object.keys(params);
     const filteredAttributes = keys.filter((k) => filterKeys.indexOf(k) >= 0);
@@ -100,7 +109,7 @@ exports.validate = (fields) => {
             }
 
             //set flag _null true if value is undefined, null, empty
-            if (field.value === undefined || field.value === null || field.value === "" || field.value.length == 0) {
+            if (field.value === undefined || field.value === 'undefined' || field.value === null || field.value === "" || field.value.length == 0) {
                 _null = true;
             }
 

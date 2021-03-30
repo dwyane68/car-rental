@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       field: 'profile_pic'
     },
-    licenceId: {
+    licenseId: {
       type: DataTypes.STRING,
       field: 'license_id'
     },
@@ -48,8 +48,8 @@ module.exports = (sequelize, DataTypes) => {
   });
   user.associate = function(models) {
     // associations can be defined here
-    user.hasOne(models.business);
-    // user.hasOne(models.memberSubscriptions);
+    user.hasMany(models.rental, {foreignKey: 'user_id'});
+    user.hasMany(models.fine, {foreignKey: 'user_id'});
   };
   return user;
 };

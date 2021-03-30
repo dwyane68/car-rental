@@ -9,11 +9,12 @@ const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
 
 const path = require('path');
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 const cCPUs   = require('os').cpus().length;
 const { ERROR_500 } = require('./config/errorCodes');
 
 const routes = require('./routes');
+const routesAdmin = require('./routesAdmin');
 const authenticate = require('./authenticate');
 
 if(cluster.isMaster ) {
@@ -44,10 +45,11 @@ else {
   app.use(express.json({limit: '50mb'}));
 
   app.use('/api/auth',routes.authRoute);
-  app.use('/api/ad', authenticate, routes.adRoute);
+  app.use('/api/rental',routes.rentalRoute);
 
   app.use('/api/admin/auth', routesAdmin.authRoute);
-  app.use('/api/admin/dashboard', routesAdmin.dashboardRoute);
+  app.use('/api/admin/car', routesAdmin.carRoute);
+  app.use('/api/admin/user', routesAdmin.userRoute);
 
   app.use((err, req, res, next) => {
     res.status(500).send({

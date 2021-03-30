@@ -9,6 +9,7 @@ const {
   INCORRECT_PASSWORD,
   USER_NOT_FOUND,
   BCRYPT_ERROR,
+  ADMIN_EXISTS
 } = require('../config/errorCodes');
 
 const generateToken = (admin) => {
@@ -41,7 +42,7 @@ exports.register = (req, res, handleError) => {
   ]);
 
   if(sanitized.error){
-    const { phone, password, email, firstName, lastName } = sanitized.error.msg;
+    const { phone, password, email, firstName, lastName } = sanitized.error;
     let msg = '';
     if(phone) {
       msg = 'Phone number is invalid';
@@ -50,7 +51,7 @@ exports.register = (req, res, handleError) => {
       msg = 'Password number is invalid';
     }
     if(email) {
-      msg = 'Email number is invalid';
+      msg = 'Email is invalid';
     }
     if(firstName) {
       msg = 'First Name number is invalid';
