@@ -18,11 +18,15 @@ const { USER_EXISTS, CAR_EXISTS, UNAUTHORISED, USER_NOT_FOUND, NO_DATA_FOUND } =
 
 
 exports.getCarList = (req, res, handleError) => {
-  const {page = 1} = req.query;
+  const {page = 1, keyword, color, type, capacity} = req.query;
   const limit = 25;
   const offset = ((parseInt(page) - 1) * limit);
+  let where = {}
+  if(color) {
+    where.color = color;
+  }
   
-  Car.getList(offset, limit).then((list) => {
+  Car.like(keyword, where, offset, limit).then((list) => {
     res.send(buildResponse({list: list}, 'Car list'))
   }, handleError);
 };

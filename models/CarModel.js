@@ -1,4 +1,5 @@
 const {car} = require('../db/models');
+const {Op} = require('sequelize');
 
 exports.get = async (id) => {
   let condition = {id: id};
@@ -40,7 +41,7 @@ exports.update = async (userId, userData) => {
 
 exports.like = async (search, where, offset, limit) => {
 
-  const whereCondition = search ? {
+  let whereCondition = search ? {
     name: {
       [Op.like]: `%${search}%`
     },
@@ -56,5 +57,5 @@ exports.like = async (search, where, offset, limit) => {
     opt.offset = offset;
   }
 
-  return await business.findAll(opt)
+  return await car.findAll(opt)
 };
